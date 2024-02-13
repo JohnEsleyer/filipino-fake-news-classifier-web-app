@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md flex flex-col ">
-        <h1 className="text-2xl font-semibold mb-4">Filipino Fake News Classifier</h1>
+        <h1 className="text-2xl font-semibold mb-4">Filipino Fake News Detector</h1>
         <label htmlFor="userInput" className="block text-sm font-medium text-gray-600 mb-2">
           Enter Text:
         </label>
