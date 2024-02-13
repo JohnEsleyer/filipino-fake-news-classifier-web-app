@@ -1,4 +1,4 @@
-# Filipino Fake News Classifier App
+# Filipino Fake News Detector App
 A web application that classifies Filipino texts for fake news content.
 
 Note: This repository does not include the ML model because of Github's file size limit restrictions.

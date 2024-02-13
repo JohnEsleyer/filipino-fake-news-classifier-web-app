@@ -24,7 +24,7 @@ function App() {
       });
 
       const data = await response.json();
-      setPredictedLabel(`Predicted Label: ${data.label_text}`);
+      setPredictedLabel(`${data.label_text}`);
     } catch (error) {
       console.error('Error predicting label:', error);
       setError('Error predicting label. Please try again.');
@@ -59,7 +59,7 @@ function App() {
         </div>}
         {error && <div className="mt-4 text-red-600">{error}</div>}
         {!loading && predictedLabel && (
-          <div className="mt-4 text-lg font-semibold">{predictedLabel}</div>
+          <div className={predictedLabel == "Not Fake News" ? "mt-4 text-lg font-semibold text-green-500" : "mt-4 text-lg font-semibold text-red-500"}>{predictedLabel}</div>
         )}
       </div>
     </div>
