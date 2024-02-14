@@ -10,19 +10,23 @@ function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [countdown, setCountdown] = useState<number | null>(null);
-  const [firstTime, setFirstTime] = useState<boolean>(true);
+
 
   const predictLabel = async () => {
+    if (userInput == ''){
+      setPredictedLabel('Please enter a text');
+      return 0;
+    }
     try {
       setLoading(true);
       setError('');
       setPredictedLabel('');
 
       // If it's the first time, directly show the button without using the countdown
-      if (firstTime) {
-        setFirstTime(false);
-        return setLoading(false);
-      }
+      // if (firstTime) {
+      //   setFirstTime(false);
+      //   return setLoading(false);
+      // }
 
       setCountdown(5);
 
@@ -32,7 +36,7 @@ function App() {
             return prevCountdown - 1;
           }
           clearInterval(countdownInterval);
-          setLoading(false);
+       
           return null;
         });
       }, 1000);
@@ -47,9 +51,10 @@ function App() {
 
       const data = await response.json();
       setPredictedLabel(`${data.label_text}`);
+      setLoading(false);
     } catch (error) {
       console.error('Error predicting label:', error);
-      setError('Error predicting label. Please try again.');
+      setError('Error predicting label. The server is probably down at this moment.');
     }
   };
 
@@ -60,7 +65,7 @@ function App() {
   }, [countdown]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md flex flex-col ">
         <h1 className="text-2xl font-semibold mb-4">Filipino Fake News Detector</h1>
         <h1 className="text-xl font-semibold mb-4">ᜉᜒᜎᜒᜉᜒᜈᜓ</h1>
@@ -77,9 +82,9 @@ function App() {
         <Button
           className="mt-4"
           onClick={predictLabel}
-          disabled={loading || (countdown !== null && countdown > 0)}
+          disabled={countdown !== null && countdown > 0}
         >
-          {loading ? (countdown !== null ? `Processing (${countdown}s)` : 'Processing') : 'Detect Fake News'}
+          {loading || countdown !== null ? `Please wait for ${countdown}s to detect again` : 'Detect Fake News'}
         </Button>
       
           
@@ -90,10 +95,13 @@ function App() {
         {!loading && predictedLabel && (
           <div className={predictedLabel === "Not Fake News" ? "mt-4 text-lg font-semibold text-green-500" : "mt-4 text-lg font-semibold text-red-500"}>{predictedLabel}</div>
         )}
-        <div className="mt-2 text-sm">The model used in this web application is not 100% accurate in detecting fake news.</div>
-          <div className="mt-2 text-sm">While no detection system is perfect, this application can give you valuable insights into the potential truthfulness of Filipino news.</div>
+        <hr></hr>
+        <div className="mt-2 text-sm font-bold">Important Note!</div>
+        <div className="mt-2 text-sm">The model used in this web application is not 100% accurate in detecting fake news. This app is not meant to replace your own judgment when evaluating information.</div>
+         
 
       </div>
+      <div className="mt-2 flex-row"><a href="https:www.github.com/johnesleyer">@JohnEsleyer</a></div>
     </div>
   );
 }
