@@ -45,8 +45,8 @@ function App() {
       });
 
       const data = await response.json();
-      setPredictedLabel(`${data.label_text}`);
       setLoading(false);
+      setPredictedLabel(`${data.label_text}`);
     } catch (error) {
       console.error('Error predicting label:', error);
       setError('Error predicting label. The server is probably down at this moment.');
