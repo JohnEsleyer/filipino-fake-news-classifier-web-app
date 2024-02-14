@@ -16,3 +16,6 @@ python app.py
 npm install
 npm run dev
 ```
+
+### Preview
+![Screenshot from 2024-02-14 13-14-52](https://github.com/JohnEsleyer/filipino-fake-news-detector/assets/66754038/7bfcb9d5-d8ae-4b9e-902f-e5b8f8fda5b9)
