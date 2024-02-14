@@ -23,12 +23,6 @@ function App() {
       setError('');
       setPredictedLabel('');
 
-      // If it's the first time, directly show the button without using the countdown
-      // if (firstTime) {
-      //   setFirstTime(false);
-      //   return setLoading(false);
-      // }
-
       setCountdown(5);
 
       const countdownInterval = setInterval(() => {
