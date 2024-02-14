@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Loading from "./assets/loading.svg";
+import FilipinoFlag from "./assets/flag.svg";
 import './App.css';
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md flex flex-col ">
+      <img style={{ margin: 'auto' }} src={FilipinoFlag} width="100" height="100" alt="" />
         <h1 className="text-2xl font-semibold mb-4">Filipino Fake News Detector</h1>
         <h1 className="text-xl font-semibold mb-4">ᜉᜒᜎᜒᜉᜒᜈᜓ</h1>
         <label htmlFor="userInput" className="block text-sm font-medium text-gray-600 mb-2">
@@ -88,9 +90,9 @@ function App() {
         </Button>
       
           
-        {loading && <div className="mt-4 flex items-center">
+        {loading && 
           <img style={{ margin: 'auto' }} width="50" height="50" src={Loading} alt="Loading" />
-        </div>}
+        }
         {error && <div className="mt-4 text-red-600">{error}</div>}
         {!loading && predictedLabel && (
           <div className={predictedLabel === "Not Fake News" ? "mt-4 text-lg font-semibold text-green-500" : "mt-4 text-lg font-semibold text-red-500"}>{predictedLabel}</div>
