@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
@@ -7,27 +7,36 @@ from transformers import TFAutoModelForSequenceClassification, AutoTokenizer
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-loaded_model = TFAutoModelForSequenceClassification.from_pretrained('bert_model_fake_news')
-loaded_tokenizer = AutoTokenizer.from_pretrained('bert_model_fake_news')
+model_path = 'fine_tuned_distilbert_model'
+model = tf.saved_model.load(model_path)
+tokenizer = AutoTokenizer.from_pretrained(model_path, do_lower_case=False)
 
 def predict_label(text):
-    input_encoding = loaded_tokenizer(text, truncation=True, padding=True, max_length=128, return_tensors='tf')
-    input_encoding = {key: np.array(value) for key, value in input_encoding.items()}
-    prediction = loaded_model.predict(input_encoding)
-    predicted_label = tf.argmax(prediction.logits, axis=1).numpy()[0]
+    input_tokens = tokenizer(text, truncation=True, padding='max_length', max_length=128, return_tensors='tf')
+    output = model(input_tokens['input_ids'], training=False)
+    probabilities = tf.nn.softmax(output, axis=-1)
 
-    return predicted_label
+    predicted_label = np.argmax(probabilities, axis=1).tolist() 
+    confidence = np.max(probabilities)  
+
+    return [predicted_label, confidence]
+
 
 @app.route('/', methods=['POST'])
 def predict():
     data = request.get_json()
     user_input = data.get('user_input', '')
-    predicted_label = predict_label(user_input)
-    label_text = "Fake News" if predicted_label == 1 else "Not Fake News"
+    res = predict_label(user_input)
+    predicted_label = res[0]
+    confidence = res[1]
+
+    label_text = "Fake News" if predicted_label[0] == 1 else "Not Fake News"
 
     response = {
         'user_input': user_input,
-        'label_text': label_text
+        'predicted_label': predicted_label,
+        'label_text': label_text,
+        'confidence': int(confidence * 100)
     }
 
     return jsonify(response)
